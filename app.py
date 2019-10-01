@@ -8,6 +8,15 @@ app = Flask(__name__)
 model = pickle.load(open('model.pkl', 'rb'))
 model2 = tf.keras.models.load_model('final_model.h5')
 ## Begin
+
+def prepare_response(classes):
+    index = np.argmax(classes)
+    return {
+        'class': str(index),
+        'class_desc': predictions[index]
+    }
+  
+  
 predictions = {
               0 : 'Warning for a bad road surface',
               1 : 'Warning for a speed bump',
@@ -89,9 +98,9 @@ def upload_file():
             predict_image128x128 = skimage.transform.resize(predict_image, (128, 128))
             predict_image128x128 = np.array(predict_image128x128)
             #print(predict_image128x128.shape)
-            traffic_model = model2
+            #traffic_model = model2
             predict_image128x128 = np.expand_dims(predict_image128x128, axis=0)
-            classes = traffic_model.predict(predict_image128x128)
+            classes = model2.predict(predict_image128x128)
             #print(classes)
             #filename = secure_filename(file.filename)
             #final_path = os.path.join(app.config['UPLOAD_FOLDER'])
