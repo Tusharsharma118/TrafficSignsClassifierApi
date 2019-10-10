@@ -26,8 +26,8 @@ def prepare_response(classes):
             'confidence': math.floor(classes[0][np.argmax(classes)] * 100)
 
         }
-  
-  
+
+
 predictions = {
               0 : 'Warning for a bad road surface',
               1 : 'Warning for a speed bump',
@@ -111,7 +111,7 @@ def upload_file():
                 if len(predict_image.shape) <= 2:
                     return 'Failed Image should be colored!'
                 predict_image = skimage.color.rgba2rgb(predict_image)
-			print('Input File Shape: ', predict_image.shape)
+            print('Input File Shape: ', predict_image.shape)
             predict_image128x128 = skimage.transform.resize(predict_image, (128, 128))
             predict_image128x128 = np.array(predict_image128x128)
             #print(predict_image128x128.shape)
