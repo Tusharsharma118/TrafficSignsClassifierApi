@@ -3,18 +3,29 @@ from flask import Flask, request, jsonify, render_template
 import pickle
 import tensorflow as tf
 import skimage
+import math
 
 app = Flask(__name__)
 model = pickle.load(open('model.pkl', 'rb'))
 model2 = tf.keras.models.load_model('final_model.h5')
 ## Begin
 
+
 def prepare_response(classes):
     index = np.argmax(classes)
-    return {
-        'class': str(index),
-        'class_desc': predictions[index]
-    }
+    if classes[0][np.argmax(classes)] > 0.6:
+        return {
+            'class': str(index),
+            'class_desc': predictions[index],
+            'confidence': math.floor(classes[0][np.argmax(classes)] * 100)
+        }
+    else:
+        return {
+            'class': 'None',
+            'class_desc': 'Traffic Sign not present',
+            'confidence': math.floor(classes[0][np.argmax(classes)] * 100)
+
+        }
   
   
 predictions = {
@@ -94,7 +105,13 @@ def upload_file():
            # print('NO FILE SELECTED')
             return "FAIL NO FILE"
         if file:
-            predict_image = skimage.data.imread(file)
+            predict_image = skimage.io.imread(file)
+            print('Raw File Shape: ', predict_image.shape)
+            if 'png' in file.filename.lower():
+                if len(predict_image.shape) <= 2:
+                    return 'Failed Image should be colored!'
+                predict_image = skimage.color.rgba2rgb(predict_image)
+			print('Input File Shape: ', predict_image.shape)
             predict_image128x128 = skimage.transform.resize(predict_image, (128, 128))
             predict_image128x128 = np.array(predict_image128x128)
             #print(predict_image128x128.shape)
