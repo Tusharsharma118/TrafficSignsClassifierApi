@@ -21,7 +21,7 @@ body {
 
 .text p {
   white-space: nowrap;
-  overflow: hidden;
+ 
   width: 100%;
   -webkit-animation: type .3s steps(60, end) 3.7s;
   animation: type .3s steps(60, end) 3.7s;
