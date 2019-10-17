@@ -7,8 +7,8 @@ import math
 
 app = Flask(__name__)
 
-model2 = tf.keras.models.load_model('final_model.h5')
-## Begin
+model = tf.keras.models.load_model('final_model.h5')
+
 
 
 def prepare_response(classes):
@@ -115,9 +115,8 @@ def upload_file():
             predict_image128x128 = skimage.transform.resize(predict_image, (128, 128))
             predict_image128x128 = np.array(predict_image128x128)
             #print(predict_image128x128.shape)
-            #traffic_model = model2
             predict_image128x128 = np.expand_dims(predict_image128x128, axis=0)
-            classes = model2.predict(predict_image128x128)
+            classes = model.predict(predict_image128x128)
             #print(classes)
             #filename = secure_filename(file.filename)
             #final_path = os.path.join(app.config['UPLOAD_FOLDER'])
