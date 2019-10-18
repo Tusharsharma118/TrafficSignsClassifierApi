@@ -128,7 +128,7 @@ def upload_file():
             # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return jsonify(prepare_response(classes))
     else:
-        return 'NOT POST'
+        return jsonify(prepare_response(None,error_text='Invalid Request'))
 
 
 @app.route('/')
